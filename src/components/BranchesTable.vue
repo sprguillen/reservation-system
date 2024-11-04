@@ -2,7 +2,7 @@
   <div>
     <section class="branches-table">
       <div class="branches-table__actions">
-        <button class="primary" @click="openModal">Add Branches</button>
+        <CustomButton type="primary" @onClick="openModal">Add Branches</CustomButton>
       </div>
       <div class="branches-table__content">
         <table>
@@ -16,7 +16,7 @@
           </thead>
           <tbody>
             <tr v-for="(branch, i) in branches" :key="i">
-              <td class="pointer"><router-link to="/edit">{{ branch.name }}</router-link></td>
+              <td class="cursor-pointer"><router-link to="/edit">{{ branch.name }}</router-link></td>
               <td>{{ branch.reference }}</td>
               <td>{{ branch.numOfTables }}</td>
               <td>{{ branch.reservationDuration }}</td>
@@ -27,14 +27,12 @@
     </section>
     <popup-modal ref="popupModal" title="Add Branches">
       <div>
-        <select>
-          <option v-for="(branch, i) in branches" :key="i">{{ branch.name }}</option>
-        </select>
+        <CustomSelect :options="branches" :value="branchToUpdate" />
       </div>
       <template slot="footer">
         <div class="footer-action">
-          <button class="tertiary" @click="closeModal">Cancel</button>
-          <button class="primary">Save</button>
+          <CustomButton @click="closeModal">Cancel</CustomButton>
+          <CustomButton type="primary">Save</CustomButton>
         </div>
       </template>
     </popup-modal>
@@ -42,14 +40,19 @@
 </template>
 <script>
 import PopupModal from './PopupModal.vue';
+import CustomButton from './CustomButton.vue';
+import CustomSelect from './CustomSelect.vue';
 export default {
   name: 'BranchesTable',
   components: {
-    PopupModal
+    PopupModal,
+    CustomButton,
+    CustomSelect,
   },
   data() {
     return {
       show: false,
+      branchToUpdate: '',
       branches: [
         {
           name: 'Branch 1',

@@ -1,18 +1,23 @@
 <template>
-  <nav>
+  <nav class="px-4 py-4 flex justify-between items-center">
     <div>
       <router-link to="/">
-        <img src="../assets/logo.png" alt="logo" />
+        <img src="../assets/logo.png" alt="logo" class="w-12 h-12" />
       </router-link>
     </div>
     <div>
-      <button class="secondary" @click="clickHandler">Disable Reservations</button>
+      <CustomButton type="secondary" @onClick="clickHandler">Disable Reservations</CustomButton>
     </div>
   </nav>
 </template>
 <script>
+import CustomButton from './CustomButton.vue';
+
 export default {
   name: 'NavHeader',
+  components: {
+    CustomButton,
+  },
   methods: {
     clickHandler () {
       console.log('test');
@@ -20,16 +25,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-img {
-  width: 3rem;
-  height: 3rem;
-}
-
-nav {
-  display: flex;
-  align-items: center;
-  padding: 1rem 0;
-  justify-content: space-between;
-}
-</style>
