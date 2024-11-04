@@ -1,6 +1,6 @@
 <template>
   <main>
-    <branches-table />
+    <branches-table class="p-4" />
   </main>
 </template>
 <script>

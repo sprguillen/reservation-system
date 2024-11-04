@@ -1,6 +1,6 @@
 <template>
   <button
-    class="px-4 py-2 rounded-md text-white font-semibold"
+    class="px-4 py-2 rounded-md font-semibold"
     :class="buttonType"
     @click="$emit('onClick')"
   >
@@ -19,12 +19,12 @@ export default {
   computed: {
     buttonType () {
       if (this.type === 'primary') {
-        return 'bg-primary hover:bg-primary-2';
+        return 'bg-primary hover:bg-primary-2 text-white';
       } else if (this.type === 'secondary') {
-        return 'bg-secondary hover:bg-secondary-2';
+        return 'bg-secondary hover:bg-secondary-2 text-white';
       }
 
-      return 'bg-gray-300 hover:bg-gray-400';
+      return 'border-2 border-gray-200 hover:bg-gray-200 text-gray-500';
     }
   }
 }
