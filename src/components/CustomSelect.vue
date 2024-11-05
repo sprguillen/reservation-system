@@ -4,11 +4,15 @@
     <div class="grid items-center">
       <select 
         class="p-2.5 bg-gray-50 border border-gray-300 rounded-lg appearance-none row-start-1 col-start-1"
-        value="value"
-        @change="$emit('change', $event.target.value)"
+        :value="value"
+        @change="$emit('onChange', $event.target.value)"
       >
         <option selected disabled value="">{{ placeholder }}</option>
-        <option v-for="(option, i) in options" :key="i">{{ option.name || option.label }}</option>
+        <option
+          v-for="(option, i) in options"
+          :key="i"
+          :value="option.id || option.name"
+        >{{ option.name || option.label }}</option>
       </select>
       <span class="pointer-events-none row-start-1 col-start-1 absolute right-6">
         <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
@@ -29,7 +33,7 @@ export default {
   props: {
     value: {
       type: String,
-      required: true,
+      required: false,
     },
     options: {
       type: Array,

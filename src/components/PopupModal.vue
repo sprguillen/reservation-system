@@ -2,7 +2,7 @@
   <dialog ref="dialog" class="dialog w-full max-w-md border-none rounded-lg shadow-lg bg-white p-0">
     <div class="flex justify-between items-center px-4 py-3 border-b border-gray-300 bg-gray-100">
       <h3 class="text-lg font-bold text-gray-700">{{ title }}</h3>
-      <span class="text-gray-500 hover:text-gray-700 cursor-pointer" @click="close">X</span>
+      <span class="text-gray-500 hover:text-gray-700 cursor-pointer" @click.self="close">X</span>
     </div>
     <div class="p-5 text-gray-800">
       <slot></slot>
