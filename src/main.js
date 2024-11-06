@@ -16,18 +16,25 @@ Vue.use(VueToast);
 const routes = [
   {
     path: '/',
-    component: HomePage
+    component: HomePage,
+    meta: { title: 'Reservation System - Home Page' }
   },
   {
     path: '/edit/:branchId',
     name: 'EditBranch',
-    component: EditPage
+    component: EditPage,
+    meta: { title: 'Reservation System - Edit Branch' }
   }
 ];
 
 const router = new VueRouter({
   mode: 'history',
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title || 'Reservation System';
+  next();
 });
 
 new Vue({
