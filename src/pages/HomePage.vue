@@ -56,7 +56,7 @@
     <popup-modal ref="confirmModal" title="Confirm">
       <p>Confirm {{ type === 'add' ? `enable reservation of ${branchName}?` : `disable reservation of ${branchName}?` }}</p>
       <template slot="footer">
-        <div class="flex gap-4 mt-4">
+        <div class="flex gap-x-4">
           <custom-button @onClick="closeConfirmModal">Cancel</custom-button>
           <custom-button :disable="isLoading" @onClick="saveBranchAction" color="primary">
             <loader-spinner v-if="isLoading" />

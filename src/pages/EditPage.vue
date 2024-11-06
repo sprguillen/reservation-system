@@ -33,11 +33,23 @@
           @onUpdate="slotUpdate"
         />
         <div class="flex justify-between items-center">
-          <span class="text-secondary font-semibold">Disable Branch Reservation</span>
-          <custom-button :disable="!isDirty" type="submit" color="primary">Submit</custom-button>
+          <span class="text-secondary font-semibold cursor-pointer" @click="disableBranch">Disable Branch Reservation</span>
+          <custom-button :disable="!isDirty || isLoading" type="submit" color="primary">Submit</custom-button>
         </div>
       </form>
     </section>
+    <popup-modal ref="confirmModal" title="Confirm">
+      <p>Confirm {{ actionType === 'edit' ? `the edit of branch ${branch.name}`: `disable reservation of ${branch.name}` }}</p>
+      <template slot="footer">
+        <div class="flex gap-x-4">
+          <custom-button @onClick="closeConfirmModal">Cancel</custom-button>
+          <custom-button :disable="isLoading" @onClick="editBranchAction" color="primary">
+            <loader-spinner v-if="isLoading" />
+            <span v-else>Ok</span>
+          </custom-button>
+        </div>
+      </template>
+    </popup-modal>
   </main>
 </template>
 <script>
@@ -46,6 +58,9 @@ import CustomInput from '@/components/CustomInput.vue';
 import CustomButton from '@/components/CustomButton.vue';
 import CustomMultiSelect from '@/components/CustomMultiSelect.vue';
 import CustomSlots from '@/components/CustomSlots.vue';
+import PopupModal from '@/components/PopupModal.vue';
+import LoaderSpinner from '@/components/LoaderSpinner.vue';
+import { isEmpty } from '@/utils';
 
 export default {
   name: 'EditPage',
@@ -54,6 +69,8 @@ export default {
     CustomButton,
     CustomMultiSelect,
     CustomSlots,
+    PopupModal,
+    LoaderSpinner,
   },
   data() {
     return {
@@ -67,7 +84,10 @@ export default {
         'friday',
       ],
       reservationDuration: null,
-      reservationTimes: {}
+      reservationTimes: {},
+      isDirty: false,
+      isLoading: false,
+      actionType: null,
     }
   },
   computed: {
@@ -76,19 +96,54 @@ export default {
     }),
     currentSlots() {
       return (day) => {
-        console.log('aw');
         return this.reservationTimes[day] || [];
       };
     },
-    isDirty() {
-      return this.branch.reservation_duration !== this.reservationDuration
-        || this.branch.reservation_times !== this.reservationTimes;
-    }
+    reservationTimesCloned() {
+      return Object.assign({}, this.reservationTimes);
+    },
+    branchId() {
+      return this.$route.params.branchId;
+    },
   },
   methods: {
-    ...mapActions(['fetchBranch']),
+    ...mapActions(['fetchBranch', 'updateBranch']),
+    reset() {
+      this.actionType = null;
+      this.isLoading = false;
+    },
+    closeConfirmModal() {
+      this.$refs.confirmModal.close();
+    },
+    disableBranch() {
+      this.actionType = 'disable';
+      this.$refs.confirmModal.open();
+    },
     submitForm() {
-      console.log(this.branch);
+      this.actionType = 'edit';
+      this.$refs.confirmModal.open();
+    },
+    async editBranchAction() {
+      this.isLoading = true;
+      const data = {
+        id: this.branchId,
+        payload: {},
+      };
+
+      if (this.actionType === 'edit') {
+        data.payload = {
+          'reservation_duration': this.reservationDuration,
+          'reservation_times': this.reservationTimes,
+        }
+      } else {
+        data.payload['accepts_reservations'] = false;
+      }
+
+      await this.updateBranch(data);
+      await this.fetchBranch(this.branchId);
+      this.reset()
+      this.$refs.confirmModal.close();
+      this.$router.go(-1);
     },
     slotUpdate(slots, label) {
       this.reservationTimes[label] = slots;
@@ -102,14 +157,26 @@ export default {
     }
   },
   created() {
-    const { branchId } = this.$route.params;
-    this.fetchBranch(branchId);
+    this.fetchBranch(this.branchId);
   },
   watch: {
-    branch (newVal) {
+    branch(newVal) {
       if (newVal) {
         this.reservationDuration = newVal.reservation_duration;
         this.reservationTimes = newVal.reservation_times ? newVal.reservation_times : {};
+      }
+    },
+    reservationDuration(newVal, oldVal) {
+      if (oldVal && newVal !== oldVal) {
+        this.isDirty = true;
+      }
+    },
+    reservationTimesCloned: {
+      deep: true,
+      handler(newVal, oldVal) {
+        if (!isEmpty(oldVal) && newVal !== oldVal) {
+          this.isDirty = true;
+        }
       }
     }
   }

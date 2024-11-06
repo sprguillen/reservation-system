@@ -14,7 +14,7 @@
         :placeholder="!values || values?.length === 0 ? 'Select tables' : ''"
         class="outline-none flex-grow"
         @blur="showDropdown = false"
-        @click.stop="toggleDropdown"
+        @click="toggleDropdown"
         :disabled="readOnly"
       />
     </div>

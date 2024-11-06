@@ -28,16 +28,26 @@
           @input="onEndInput($event, index)"
           class="bg-white text-gray-800 p-1 border border-gray-300 rounded-lg w-1/3 text-xs"
         />
-        <button class="rounded-full bg-gray-200 text-secondary-2 h-8 w-8 absolute right-2" @click="addSlot">+</button>
+        <custom-button
+          class="absolute right-2"
+          shape="circle"
+          @onClick="addSlot"
+        >
+          +
+        </custom-button>
       </div>
     </div>
   </div>
 </template>
 <script>
 import moment from 'moment';
+import CustomButton from './CustomButton.vue';
 
 export default {
   name: 'CustomSlots',
+  components: {
+    CustomButton
+  },
   props: {
     label: {
       type: String,
@@ -101,9 +111,9 @@ export default {
     currentSlots: {
       immediate: true,
       deep: true,
-      handler(newSlots) {
-        if (newSlots && newSlots.length) {
-          this.slots = [...newSlots];
+      handler(newVal) {
+        if (newVal && newVal.length) {
+          this.slots = [...newVal];
         } else {
           this.slots = [['00:00', '00:00']];
         }

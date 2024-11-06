@@ -48,9 +48,9 @@ export default {
   methods: {
     inputHandler(event) {
       if (this.type === 'number') {
-        this.$emit('onInput', +event.target.value);
+        this.$emit('input', +event.target.value);
       } else {
-        this.$emit('onInput', event.target.value);
+        this.$emit('input', event.target.value);
       }
     }
   }
