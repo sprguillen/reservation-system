@@ -1,4 +1,4 @@
-# reservation-system
+# Reservation System using Foodics API.
 
 ## Project setup
 ```
