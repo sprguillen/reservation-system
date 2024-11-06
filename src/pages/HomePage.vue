@@ -129,22 +129,36 @@ export default {
       this.$refs.confirmModal.open();
     },
     async saveBranchAction() {
-      this.isLoading = true;
-      const data = {
-        id: this.branchToUpdate,
-        payload: {}
-      };
-      if (this.type === 'add') {
-        data.payload['accepts_reservations'] = true;
-      } else if (this.type === 'disable') {
-        data.payload['accepts_reservations'] = false;
-      }
+      try {
+        this.isLoading = true;
+        const data = {
+          id: this.branchToUpdate,
+          payload: {}
+        };
+        if (this.type === 'add') {
+          data.payload['accepts_reservations'] = true;
+        } else if (this.type === 'disable') {
+          data.payload['accepts_reservations'] = false;
+        }
 
-      await this.updateBranch(data);
-      await this.fetchBranches();
-      this.reset();
-      this.$refs.confirmModal.close();
-      this.$refs.actionModal.close();
+        await this.updateBranch(data);
+        await this.fetchBranches();
+        this.reset();
+        this.$refs.confirmModal.close();
+        this.$refs.actionModal.close();
+
+        this.$toast.open({
+          message: 'Success!',
+          type: 'success',
+        });
+      } catch (error) {
+        this.reset();
+        this.$refs.confirmModal.close();
+        this.$toast.open({
+          message: error,
+          type: 'error',
+        });
+      }
     }
   },
   created() {

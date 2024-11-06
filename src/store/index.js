@@ -36,7 +36,7 @@ export default new Vuex.Store({
         const response = await axiosClient.get('/api/branches?include[0]=sections&include[1]=sections.tables');
         commit('setBranches', response.data?.data);
       } catch (error) {
-        console.error(`Error fetching data: ${error}`);
+        throw new Error(error.response.data.message);
       }
     },
     async fetchBranch({ commit }, id) {
@@ -44,14 +44,14 @@ export default new Vuex.Store({
         const response = await axiosClient.get(`/api/branches/${id}`);
         commit('setBranch', response.data?.data);
       } catch (error) {
-        console.error(`Error fetching data: ${error}`);
+        throw new Error(error.response.data.message)
       }
     },
     async updateBranch(_, { id, payload }) {
       try {
         await axiosClient.put(`/api/branches/${id}`, payload);
       } catch (error) {
-        console.error(`Error fetching data: ${error}`);
+        throw new Error(error.response.data.message);
       }
     }
   }

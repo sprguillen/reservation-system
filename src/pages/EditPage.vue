@@ -124,26 +124,39 @@ export default {
       this.$refs.confirmModal.open();
     },
     async editBranchAction() {
-      this.isLoading = true;
-      const data = {
-        id: this.branchId,
-        payload: {},
-      };
+      try {
+        this.isLoading = true;
+        const data = {
+          id: this.branchId,
+          payload: {},
+        };
 
-      if (this.actionType === 'edit') {
-        data.payload = {
-          'reservation_duration': this.reservationDuration,
-          'reservation_times': this.reservationTimes,
+        if (this.actionType === 'edit') {
+          data.payload = {
+            'reservation_duration': this.reservationDuration,
+            'reservation_times': this.reservationTimes,
+          }
+        } else {
+          data.payload['accepts_reservations'] = false;
         }
-      } else {
-        data.payload['accepts_reservations'] = false;
-      }
 
-      await this.updateBranch(data);
-      await this.fetchBranch(this.branchId);
-      this.reset()
-      this.$refs.confirmModal.close();
-      this.$router.go(-1);
+        await this.updateBranch(data);
+        await this.fetchBranch(this.branchId);
+        this.reset()
+        this.$refs.confirmModal.close();
+        this.$toast.open({
+          message: 'Success!',
+          type: 'success',
+        });
+        this.$router.go(-1);
+      } catch (error) {
+        this.reset();
+        this.$refs.confirmModal.close();
+        this.$toast.open({
+          message: error,
+          type: 'error',
+        });
+      }
     },
     slotUpdate(slots, label) {
       this.reservationTimes[label] = slots;
