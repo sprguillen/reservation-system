@@ -2,7 +2,7 @@
   <main class="p-4">
     <section class="shadow bg-white rounded-lg p-4">
       <div class="flex flex-row-reverse mb-4 gap-2">
-        <custom-button type="secondary" @onClick="openActionModal('disable')">Disable Reservations</custom-button>
+        <custom-button color="secondary" @onClick="openActionModal('disable')">Disable Reservations</custom-button>
         <custom-button @onClick="openActionModal('add')">Add Branches</custom-button>
       </div>
       <div class="flex items-center justify-center">
@@ -49,7 +49,7 @@
       <template slot="footer">
         <div class="flex gap-4 mt-4">
           <custom-button @onClick="closeActionModal">Cancel</custom-button>
-          <custom-button :disable="!branchToUpdate" @onClick="openConfirmModal" type="primary">Save</custom-button>
+          <custom-button :disable="!branchToUpdate" @onClick="openConfirmModal" color="primary">Save</custom-button>
         </div>
       </template>
     </popup-modal>
@@ -58,7 +58,7 @@
       <template slot="footer">
         <div class="flex gap-4 mt-4">
           <custom-button @onClick="closeConfirmModal">Cancel</custom-button>
-          <custom-button :disable="isLoading" @onClick="saveBranchAction" type="primary">
+          <custom-button :disable="isLoading" @onClick="saveBranchAction" color="primary">
             <loader-spinner v-if="isLoading" />
             <span v-else>Ok</span>
           </custom-button>
@@ -70,10 +70,10 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import LoaderSpinner from '@/components/LoaderSpinner.vue';
-import CustomButton from '../components/CustomButton.vue';
-import CustomSelect from '../components/CustomSelect.vue';
-import PopupModal from '../components/PopupModal.vue';
-import { countTables } from '../utils';
+import CustomButton from '@/components/CustomButton.vue';
+import CustomSelect from '@/components/CustomSelect.vue';
+import PopupModal from '@/components/PopupModal.vue';
+import { countTables } from '@/utils';
 
 export default {
   name: 'HomePage',

@@ -1,13 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axiosClient from '../utils/axios';
+import axiosClient from '@/utils/axios';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state() {
     return {
-      branches: []
+      branches: [],
+      branch: {},
     }
   },
   getters: {
@@ -16,11 +17,17 @@ export default new Vuex.Store({
     },
     getAllDisabledBranches(state) {
       return state.branches?.filter((branch) => !branch.accepts_reservations);
+    },
+    getCurrentBranch(state) {
+      return state.branch;
     }
   },
   mutations: {
     setBranches(state, payload) {
       state.branches = payload;
+    },
+    setBranch(state, payload) {
+      state.branch = payload;
     }
   },
   actions: {
@@ -32,7 +39,14 @@ export default new Vuex.Store({
         console.error(`Error fetching data: ${error}`);
       }
     },
-    // eslint-disable-next-line no-unused-vars
+    async fetchBranch({ commit }, id) {
+      try {
+        const response = await axiosClient.get(`/api/branches/${id}`);
+        commit('setBranch', response.data?.data);
+      } catch (error) {
+        console.error(`Error fetching data: ${error}`);
+      }
+    },
     async updateBranch(_, { id, payload }) {
       try {
         await axiosClient.put(`/api/branches/${id}`, payload);

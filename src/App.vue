@@ -23,9 +23,19 @@ export default {
   font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   background-color: rgb(226 232 240);
-  height: 100vh
+}
+
+@media (min-width: 1024px) {
+  #app {
+    min-height: 1000px;
+  }
+}
+
+@media (min-width: 2048px) {
+  #app {
+    min-height: 1500px;
+  }
 }
 </style>

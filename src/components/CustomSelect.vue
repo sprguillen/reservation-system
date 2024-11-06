@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex flex-col">
     <label>{{ label }}</label>
     <div class="grid items-center">
       <select 
@@ -24,7 +24,6 @@
         </svg>
       </span>
     </div>
-    
   </div>
 </template>
 <script>
