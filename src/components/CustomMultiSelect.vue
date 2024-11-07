@@ -5,7 +5,7 @@
       <div
         v-for="(option, index) in values"
         :key="index"
-        class="bg-primary text-white rounded-full px-4 py-1 flex items-center gap-1"
+        class="bg-primary text-white rounded-full px-4 py-1 flex items-center gap-1 font-semibold text-md"
       >
         <span>{{ prepend ? `${prepend} - ${option.name}` : option.name }}</span>
         <button v-if="!readOnly" @click="removeOption(option)" class="text-white font-bold ml-1">x</button>

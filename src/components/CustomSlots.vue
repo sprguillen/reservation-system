@@ -14,22 +14,44 @@
       <div
         v-for="(slot, index) in convertedSlots"
         :key="index"
-        class="rounded-full p-0.5 flex items-center gap-1 w-40"
+        class="rounded-full p-0.5 w-40"
       >
-        <input
-          type="text"
-          :value="slot.start"
-          @input="onStartInput($event, index)"
-          class="bg-white text-gray-800 p-1 border border-gray-300 rounded-lg w-1/3 text-xs"
-        />
-        <input
-          type="text"
-          :value="slot.end"
-          @input="onEndInput($event, index)"
-          class="bg-white text-gray-800 p-1 border border-gray-300 rounded-lg w-1/3 text-xs"
-        />
+        <div class="relative flex items-center justify-center gap-1 border rounded-md bg-primary">
+          <input
+            type="text"
+            :value="slot.start"
+            @input="onStartInput($event, index)"
+            class="bg-transparent text-white p-1 w-1/3 text-sm font-semibold"
+          />
+          <input
+            type="text"
+            :value="slot.end"
+            @input="onEndInput($event, index)"
+            class="bg-transparent text-white p-1 w-1/3 text-sm font-semibold"
+          />
+          <button
+            class="rounded-full h-4 w-4 bg-white flex items-center justify-center"
+            type="button"
+            @click="removeSlot(index)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 text-secondary"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
         <custom-button
-          class="absolute right-2"
+          class="absolute top-7 right-2"
           shape="circle"
           @onClick="addSlot"
         >
@@ -104,6 +126,12 @@ export default {
     addSlot() {
       if (this.slots.length < 3) {
         this.slots.push(['00:00', '00:00']);
+      }
+    },
+    removeSlot(index) {
+      if (this.slots.length > 1) {
+        this.slots.splice(index, 1);
+        this.$emit('onUpdate', this.slots, this.label);
       }
     }
   },
